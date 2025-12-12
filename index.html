@@ -21,20 +21,16 @@
       <div class="field-group">
         <label class="field-label" for="title-input">Title</label>
         <div class="field-inline">
-          <input id="title-input" type="text" placeholder="The Document Title" />
-          <label class="checkbox-label">
-            <input id="title-enabled" type="checkbox" checked />
-            <span>Include title line</span>
-          </label>
+          <input id="title-input" type="text" placeholder="e.g. The Document Title" />
         </div>
       </div>
 
       <div class="field-group">
         <label class="field-label" for="documentclass-select">Document class</label>
         <select id="documentclass-select">
-          <option value="article">article</option>
+          <option value="article" selected>article</option>
           <option value="report">report</option>
-          <option value="book" selected>book</option>
+          <option value="book">book</option>
         </select>
       </div>
 
@@ -42,15 +38,15 @@
         <span class="field-label">Class options</span>
         <div class="checkbox-group">
           <label class="checkbox-label">
-            <input type="checkbox" id="opt-twocolumn" checked />
+            <input type="checkbox" id="opt-twocolumn" />
             <span>twocolumn</span>
           </label>
           <label class="checkbox-label">
-            <input type="checkbox" id="opt-oneside" checked />
+            <input type="checkbox" id="opt-oneside" />
             <span>oneside</span>
           </label>
           <label class="checkbox-label">
-            <input type="checkbox" id="opt-openany" checked />
+            <input type="checkbox" id="opt-openany" />
             <span>openany</span>
           </label>
         </div>
@@ -59,7 +55,7 @@
       <div class="field-group">
         <label class="checkbox-label">
           <input type="checkbox" id="toc-checkbox" checked />
-          <span>Include table of contents (toc: true)</span>
+          <span>Include table of contents</span>
         </label>
       </div>
 
@@ -81,13 +77,8 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label" for="margin-input">Margin option (geometry)</label>
-        <input id="margin-input" type="text" value="margin=1.5cm" placeholder="e.g. margin=1.5cm" />
-        <p class="field-help">
-          This value is used as the first geometry item. The second item is
-          <code>includeheadfoot</code> for <code>book</code>, or
-          <code>includefoot</code> for other classes.
-        </p>
+        <label class="field-label" for="margin-input">Margin (geometry)</label>
+        <input id="margin-input" type="text" value="1.5cm" placeholder="e.g. 1.5cm, 2in" />
       </div>
 
       <div class="actions">

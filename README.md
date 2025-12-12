@@ -12,7 +12,8 @@ build step.
 - Enable or disable `toc` (table of contents).
 - Select `papersize` (`a4` or `letter`).
 - Select `fontsize` (`10pt`, `11pt`, or `12pt`).
-- Provide a margin/geometry string, with `includeheadfoot` for `book` and
+- Provide a margin length (e.g. `1.5cm`); this is used as the first
+  geometry item as `margin=<value>`, with `includeheadfoot` for `book` and
   `includefoot` for other classes automatically added.
 - See a live YAML preview including `---` fences.
 - Copy the YAML block to the clipboard with one click.
@@ -26,10 +27,6 @@ Resetting to defaults produces this header:
 ---
 title: 'The Document Title'
 documentclass: book
-classoption:
-- twocolumn
-- oneside
-- openany
 toc: true
 papersize: a4
 fontsize: 12pt

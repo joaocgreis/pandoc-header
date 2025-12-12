@@ -1,6 +1,5 @@
 (function () {
   const titleInput = document.getElementById('title-input');
-  const titleEnabled = document.getElementById('title-enabled');
   const documentclassSelect = document.getElementById('documentclass-select');
   const optTwocolumn = document.getElementById('opt-twocolumn');
   const optOneside = document.getElementById('opt-oneside');
@@ -16,13 +15,13 @@
   const resetButton = document.getElementById('reset-button');
 
   const DEFAULTS = {
-    title: "The Document Title",
-    documentclass: 'book',
-    classoptions: ['twocolumn', 'oneside', 'openany'],
+    title: '',
+    documentclass: 'article',
+    classoptions: [],
     toc: true,
     papersize: 'a4',
     fontsize: '12pt',
-    margin: 'margin=1.5cm',
+    margin: '1.5cm',
   };
 
   function getSelectedClassoptions() {
@@ -42,7 +41,7 @@
     lines.push('---');
 
     const rawTitle = titleInput.value.trim();
-    const useTitle = titleEnabled.checked && rawTitle.length > 0;
+    const useTitle = rawTitle.length > 0;
     if (useTitle) {
       const escaped = escapeYamlSingleQuoted(rawTitle);
       lines.push("title: '" + escaped + "'");
@@ -61,8 +60,6 @@
 
     if (tocCheckbox.checked) {
       lines.push('toc: true');
-    } else {
-      lines.push('toc: false');
     }
 
     const papersize = papersizeSelect.value || DEFAULTS.papersize;
@@ -74,7 +71,7 @@
     const margin = marginInput.value.trim();
     const geometryLines = [];
     if (margin.length > 0) {
-      geometryLines.push(margin);
+      geometryLines.push('margin=' + margin);
     }
     if (documentclass === 'book') {
       geometryLines.push('includeheadfoot');
@@ -96,7 +93,6 @@
 
   function resetToDefaults() {
     titleInput.value = DEFAULTS.title;
-    titleEnabled.checked = true;
 
     documentclassSelect.value = DEFAULTS.documentclass;
 
@@ -115,7 +111,6 @@
   function attachListeners() {
     [
       titleInput,
-      titleEnabled,
       documentclassSelect,
       optTwocolumn,
       optOneside,
@@ -175,13 +170,12 @@
   }
 
   function init() {
-    titleInput.value = '';
-    titleEnabled.checked = true;
+    titleInput.value = DEFAULTS.title;
     documentclassSelect.value = DEFAULTS.documentclass;
-    optTwocolumn.checked = true;
-    optOneside.checked = true;
-    optOpenany.checked = true;
-    tocCheckbox.checked = true;
+    optTwocolumn.checked = DEFAULTS.classoptions.includes('twocolumn');
+    optOneside.checked = DEFAULTS.classoptions.includes('oneside');
+    optOpenany.checked = DEFAULTS.classoptions.includes('openany');
+    tocCheckbox.checked = DEFAULTS.toc;
     papersizeSelect.value = DEFAULTS.papersize;
     fontsizeSelect.value = DEFAULTS.fontsize;
     marginInput.value = DEFAULTS.margin;
