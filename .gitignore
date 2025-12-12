@@ -1,0 +1,6 @@
+# Temporary files
+_*
+*.tmp
+
+# Editor-specific folders
+.vscode/**/*
