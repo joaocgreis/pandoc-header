@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pandoc YAML Header Builder</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="app-header">
+    <h1>Pandoc YAML Header Builder</h1>
+    <p>Create a YAML front matter block for your Pandoc documents.</p>
+  </header>
+
+  <main class="app-main">
+    <section class="controls">
+      <h2>Options</h2>
+
+      <div class="field-group">
+        <label class="field-label" for="title-input">Title</label>
+        <div class="field-inline">
+          <input id="title-input" type="text" placeholder="The Document Title" />
+          <label class="checkbox-label">
+            <input id="title-enabled" type="checkbox" checked />
+            <span>Include title line</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="documentclass-select">Document class</label>
+        <select id="documentclass-select">
+          <option value="article">article</option>
+          <option value="report">report</option>
+          <option value="book" selected>book</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <span class="field-label">Class options</span>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="opt-twocolumn" checked />
+            <span>twocolumn</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="opt-oneside" checked />
+            <span>oneside</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="opt-openany" checked />
+            <span>openany</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="toc-checkbox" checked />
+          <span>Include table of contents (toc: true)</span>
+        </label>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="papersize-select">Paper size</label>
+        <select id="papersize-select">
+          <option value="a4" selected>a4</option>
+          <option value="letter">letter</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="fontsize-select">Font size</label>
+        <select id="fontsize-select">
+          <option value="10pt">10pt</option>
+          <option value="11pt">11pt</option>
+          <option value="12pt" selected>12pt</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="margin-input">Margin option (geometry)</label>
+        <input id="margin-input" type="text" value="margin=1.5cm" placeholder="e.g. margin=1.5cm" />
+        <p class="field-help">
+          This value is used as the first geometry item. The second item is
+          <code>includeheadfoot</code> for <code>book</code>, or
+          <code>includefoot</code> for other classes.
+        </p>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="reset-button">Reset to defaults</button>
+      </div>
+    </section>
+
+    <section class="preview">
+      <h2>YAML Preview</h2>
+      <pre id="yaml-output" class="yaml-output" aria-label="Generated YAML" tabindex="0"></pre>
+      <button type="button" id="copy-button" class="copy-button">Copy YAML</button>
+      <span id="copy-status" class="copy-status" aria-live="polite"></span>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
