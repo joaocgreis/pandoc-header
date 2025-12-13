@@ -4,6 +4,7 @@
   const optTwocolumn = document.getElementById('opt-twocolumn');
   const optOneside = document.getElementById('opt-oneside');
   const optOpenany = document.getElementById('opt-openany');
+  const optLandscape = document.getElementById('opt-landscape');
   const tocCheckbox = document.getElementById('toc-checkbox');
   const papersizeSelect = document.getElementById('papersize-select');
   const fontsizeSelect = document.getElementById('fontsize-select');
@@ -26,10 +27,12 @@
 
   function getSelectedClassoptions() {
     const options = [];
+    if (optLandscape && optLandscape.checked) options.push('landscape');
     if (optTwocolumn.checked) options.push('twocolumn');
     if (optOneside.checked) options.push('oneside');
     if (optOpenany.checked) options.push('openany');
-    return options;
+    // Sort options alphabetically to provide stable, predictable output
+    return options.sort();
   }
 
   function escapeYamlSingleQuoted(str) {
@@ -103,6 +106,7 @@
     optTwocolumn.checked = DEFAULTS.classoptions.includes('twocolumn');
     optOneside.checked = DEFAULTS.classoptions.includes('oneside');
     optOpenany.checked = DEFAULTS.classoptions.includes('openany');
+    if (optLandscape) optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
 
     tocCheckbox.checked = DEFAULTS.toc;
     papersizeSelect.value = DEFAULTS.papersize;
@@ -119,6 +123,7 @@
       optTwocolumn,
       optOneside,
       optOpenany,
+      optLandscape,
       tocCheckbox,
       papersizeSelect,
       fontsizeSelect,
@@ -183,6 +188,7 @@
     optTwocolumn.checked = DEFAULTS.classoptions.includes('twocolumn');
     optOneside.checked = DEFAULTS.classoptions.includes('oneside');
     optOpenany.checked = DEFAULTS.classoptions.includes('openany');
+    if (optLandscape) optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
     tocCheckbox.checked = DEFAULTS.toc;
     papersizeSelect.value = DEFAULTS.papersize;
     fontsizeSelect.value = DEFAULTS.fontsize;
