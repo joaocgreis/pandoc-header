@@ -16,7 +16,10 @@
 
   <main class="app-main">
     <section class="controls">
-      <h2>Options</h2>
+      <div class="controls-header">
+        <h2>Options</h2>
+        <button type="button" id="reset-button">Reset to defaults</button>
+      </div>
 
       <div class="field-group">
         <label class="field-label" for="title-input">Title</label>
@@ -79,10 +82,6 @@
       <div class="field-group">
         <label class="field-label" for="margin-input">Margin (geometry)</label>
         <input id="margin-input" type="text" value="1.5cm" placeholder="e.g. 1.5cm, 2in" />
-      </div>
-
-      <div class="actions">
-        <button type="button" id="reset-button">Reset to defaults</button>
       </div>
     </section>
 

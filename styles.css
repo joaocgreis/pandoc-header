@@ -60,6 +60,28 @@ body {
   font-size: 1.1rem;
 }
 
+.controls-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.controls-header h2 {
+  margin: 0;
+}
+
+#reset-button {
+  background: #e5e7eb;
+  color: #111827;
+  padding: 0.35rem 0.6rem;
+}
+
+#reset-button:hover {
+  background: #d1d5db;
+}
+
 .field-group {
   margin-bottom: 1rem;
 }
@@ -123,15 +145,6 @@ button {
   padding: 0.4rem 0.75rem;
   font-size: 0.95rem;
   font-weight: 500;
-}
-
-#reset-button {
-  background: #e5e7eb;
-  color: #111827;
-}
-
-#reset-button:hover {
-  background: #d1d5db;
 }
 
 .copy-button {
