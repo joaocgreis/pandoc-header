@@ -106,6 +106,34 @@
           <input id="margin-input" type="text" value="1.5cm" placeholder="e.g. 1.5cm, 2in" />
         </div>
       </div>
+
+      <div class="field-group">
+        <div class="field-row">
+          <label class="field-label label-primary">Fonts</label>
+        </div>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="opt-fallbacks" checked />
+            <span>Add emoji/symbol fallbacks</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="opt-fallbacks-cjk" />
+            <span>Add CJK fallbacks</span>
+          </label>
+        </div>
+        <div class="field-row">
+          <label class="field-label" for="mainfont-select">Main:</label>
+          <select id="mainfont-select"></select>
+        </div>
+        <div class="field-row">
+          <label class="field-label" for="sansfont-select">Sans:</label>
+          <select id="sansfont-select"></select>
+        </div>
+        <div class="field-row">
+          <label class="field-label" for="monofont-select">Mono:</label>
+          <select id="monofont-select"></select>
+        </div>
+      </div>
     </section>
 
     <section class="preview">

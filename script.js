@@ -12,11 +12,27 @@
   const papersizeSelect = document.getElementById('papersize-select');
   const fontsizeSelect = document.getElementById('fontsize-select');
   const marginInput = document.getElementById('margin-input');
+  const optFallbacks = document.getElementById('opt-fallbacks');
+  const optFallbacksCJK = document.getElementById('opt-fallbacks-cjk');
+  const mainfontSelect = document.getElementById('mainfont-select');
+  const sansfontSelect = document.getElementById('sansfont-select');
+  const monofontSelect = document.getElementById('monofont-select');
 
   const yamlOutput = document.getElementById('yaml-output');
   const copyButton = document.getElementById('copy-button');
   const copyStatus = document.getElementById('copy-status');
   const resetButton = document.getElementById('reset-button');
+
+  const MONO_FONT = 'Noto Sans Mono';
+  const sansFonts = [
+    'Noto Sans',
+    MONO_FONT,
+  ];
+  const serifFonts = [
+    'Noto Serif',
+    'EB Garamond',
+  ];
+  const sortedFonts = serifFonts.concat(sansFonts).sort();
 
   const DEFAULTS = {
     title: '',
@@ -28,6 +44,11 @@
     papersize: 'a4',
     fontsize: '12pt',
     margin: '1.5cm',
+    fallbacks: true,
+    fallbacksCJK: false,
+    mainfont: 'Noto Serif',
+    sansfont: 'Noto Sans',
+    monofont: 'Noto Sans Mono',
   };
 
   // Enable or disable specific options in the UI. We remove them
@@ -110,7 +131,6 @@
     } else {
       geometryLines.push('includefoot');
     }
-
     if (geometryLines.length > 0) {
       lines.push('geometry:');
       // Emit geometry flags in sorted order to keep arrays deterministic
@@ -118,6 +138,13 @@
         lines.push('- ' + g);
       });
     }
+
+    const mainfont = mainfontSelect.value && mainfontSelect.value.trim();
+    if (mainfont && mainfont.length > 0) addFont('main', mainfont, lines);
+    const sansfont = sansfontSelect.value && sansfontSelect.value.trim();
+    if (sansfont && sansfont.length > 0) addFont('sans', sansfont, lines);
+    const monofont = monofontSelect.value && monofontSelect.value.trim();
+    if (monofont && monofont.length > 0) addFont('mono', monofont, lines);
 
     lines.push('---');
 
@@ -146,6 +173,34 @@
     // Sort options alphabetically to provide stable, predictable output
     return options.sort();
   }
+  function addFont(fontType, fontName, lines) {
+    const escaped = escapeYamlSingleQuoted(fontName);
+    lines.push(fontType + "font: '" + escaped + "'");
+
+    const addFallbacks = optFallbacks.checked;
+    const addFallbacksCJK = optFallbacksCJK.checked;
+    if (addFallbacks || addFallbacksCJK) {
+      lines.push(fontType + 'fontfallback:');
+    }
+    if (addFallbacks) {
+      lines.push('- "NotoColorEmoji:mode=harf"');
+      lines.push('- "NotoSansMath:mode=harf"');
+      lines.push('- "NotoSansSymbols:mode=harf"');
+      lines.push('- "NotoSansSymbols2:mode=harf"');
+    }
+    if (addFallbacksCJK) {
+      if (serifFonts.includes(fontName)) {
+        lines.push('- "Noto Serif CJK JP:mode=harf"');
+      } else {
+        lines.push('- "Noto Sans CJK JP:mode=harf"');
+      }
+    }
+
+    if (fontName === MONO_FONT) {
+      lines.push(fontType + 'fontoptions:');
+      lines.push("- '`AutoFakeSlant,BoldItalicFeatures={FakeSlant}`{=latex}'");
+    }
+  }
 
   function resetToDefaults() {
     titleInput.value = DEFAULTS.title;
@@ -165,6 +220,12 @@
     fontsizeSelect.value = DEFAULTS.fontsize;
 
     marginInput.value = DEFAULTS.margin;
+
+    optFallbacks.checked = DEFAULTS.fallbacks;
+    optFallbacksCJK.checked = DEFAULTS.fallbacksCJK;
+    mainfontSelect.value = DEFAULTS.mainfont;
+    sansfontSelect.value = DEFAULTS.sansfont;
+    monofontSelect.value = DEFAULTS.monofont;
 
     updateAll();
   }
@@ -227,6 +288,11 @@
       papersizeSelect,
       fontsizeSelect,
       marginInput,
+      optFallbacks,
+      optFallbacksCJK,
+      mainfontSelect,
+      sansfontSelect,
+      monofontSelect,
     ].forEach((el) => {
       el.addEventListener('input', updateAll);
       el.addEventListener('change', updateAll);
@@ -235,7 +301,27 @@
     copyButton.addEventListener('click', copyToClipboard);
   }
 
+  function initFonts() {
+    [
+      mainfontSelect,
+      sansfontSelect,
+      monofontSelect,
+    ].forEach((fontSelect) => {
+      const unsetOption = document.createElement('option');
+      unsetOption.value = '';
+      unsetOption.textContent = '(unset)';
+      fontSelect.appendChild(unsetOption);
+      sortedFonts.forEach((fontName) => {
+        const option = document.createElement('option');
+        option.value = fontName;
+        option.textContent = fontName;
+        fontSelect.appendChild(option);
+      });
+    });
+  }
+
   function init() {
+    initFonts();
     attachListeners();
     resetToDefaults();
   }
