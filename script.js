@@ -1,10 +1,10 @@
 (function () {
   const titleInput = document.getElementById('title-input');
   const documentclassSelect = document.getElementById('documentclass-select');
-  const optTwocolumn = document.getElementById('opt-twocolumn');
+  const optLandscape = document.getElementById('opt-landscape');
   const optOneside = document.getElementById('opt-oneside');
   const optOpenany = document.getElementById('opt-openany');
-  const optLandscape = document.getElementById('opt-landscape');
+  const optTwocolumn = document.getElementById('opt-twocolumn');
   const tocCheckbox = document.getElementById('toc-checkbox');
   const tocExtra = document.getElementById('toc-extra');
   const tocTitleInput = document.getElementById('toc-title-input');
@@ -30,23 +30,9 @@
     margin: '1.5cm',
   };
 
-  function getSelectedClassoptions() {
-    const options = [];
-    if (optLandscape.checked) options.push('landscape');
-    if (optTwocolumn.checked) options.push('twocolumn');
-    // Only include 'oneside' and 'openany' when the documentclass is 'book'
-    const documentclass = documentclassSelect.value || DEFAULTS.documentclass;
-    if (documentclass === 'book') {
-      if (optOneside.checked) options.push('oneside');
-      if (optOpenany.checked) options.push('openany');
-    }
-    // Sort options alphabetically to provide stable, predictable output
-    return options.sort();
-  }
-
-  // Enable or disable book-specific options in the UI. We remove them
+  // Enable or disable specific options in the UI. We remove them
   // from the document flow (display: none) rather than disabling them.
-  function updateBookOptionsState() {
+  function updateAll() {
     const isBook = (documentclassSelect.value || DEFAULTS.documentclass) === 'book';
     // The inputs are wrapped in <label class="checkbox-label">; hide that label
     // so the checkbox and its text disappear from the flow.
@@ -54,16 +40,12 @@
     if (labelOneside && labelOneside.style) labelOneside.style.display = isBook ? '' : 'none';
     const labelOpenany = optOpenany.closest('.checkbox-label') || optOpenany.parentElement;
     if (labelOpenany && labelOpenany.style) labelOpenany.style.display = isBook ? '' : 'none';
-  }
 
-  // Return a sorted shallow copy of an array of strings. Non-strings are coerced to strings.
-  function sortedCopy(arr) {
-    if (!Array.isArray(arr)) return arr;
-    return arr.slice().map((v) => String(v)).sort();
-  }
+    // Show or hide the toc extra inputs depending on the toc checkbox state
+    const isTocEnabled = tocCheckbox.checked;
+    tocExtra.style.display = isTocEnabled ? '' : 'none';
 
-  function escapeYamlSingleQuoted(str) {
-    return str.replace(/'/g, "''");
+    yamlOutput.textContent = buildYaml();
   }
 
   function buildYaml() {
@@ -132,105 +114,85 @@
     lines.push('---');
 
     // Ensure the YAML output always ends with exactly three newlines.
-    // Build the base YAML string (no trailing newlines), then append three newlines.
-    const baseYaml = lines.join('\n');
-    const finalYaml = baseYaml + '\n\n\n';
-    yamlOutput.textContent = finalYaml;
+    const finalYaml = lines.join('\n') + '\n\n\n';
+    return finalYaml;
+  }
+  function sortedCopy(arr) {
+    // Return a sorted shallow copy of an array of strings. Non-strings are coerced to strings.
+    if (!Array.isArray(arr)) return arr;
+    return arr.slice().map((v) => String(v)).sort();
+  }
+  function escapeYamlSingleQuoted(str) {
+    return str.replace(/'/g, "''");
+  }
+  function getSelectedClassoptions() {
+    const options = [];
+    if (optLandscape.checked) options.push('landscape');
+    if (optTwocolumn.checked) options.push('twocolumn');
+    // Only include 'oneside' and 'openany' when the documentclass is 'book'
+    const documentclass = documentclassSelect.value || DEFAULTS.documentclass;
+    if (documentclass === 'book') {
+      if (optOneside.checked) options.push('oneside');
+      if (optOpenany.checked) options.push('openany');
+    }
+    // Sort options alphabetically to provide stable, predictable output
+    return options.sort();
   }
 
   function resetToDefaults() {
     titleInput.value = DEFAULTS.title;
 
     documentclassSelect.value = DEFAULTS.documentclass;
-
-    optTwocolumn.checked = DEFAULTS.classoptions.includes('twocolumn');
+    optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
     optOneside.checked = DEFAULTS.classoptions.includes('oneside');
     optOpenany.checked = DEFAULTS.classoptions.includes('openany');
-    optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
+    optTwocolumn.checked = DEFAULTS.classoptions.includes('twocolumn');
 
     tocCheckbox.checked = DEFAULTS.toc;
     tocTitleInput.value = DEFAULTS.tocTitle;
     tocDepthInput.value = DEFAULTS.tocDepth;
+
     papersizeSelect.value = DEFAULTS.papersize;
+
     fontsizeSelect.value = DEFAULTS.fontsize;
+
     marginInput.value = DEFAULTS.margin;
 
-    // Ensure UI reflects book-specific visibility rules after resetting
-    updateBookOptionsState();
-    updateTocExtraState();
-    buildYaml();
+    updateAll();
   }
 
-  function attachListeners() {
-    [
-      titleInput,
-      documentclassSelect,
-      optTwocolumn,
-      optOneside,
-      optOpenany,
-      optLandscape,
-      tocCheckbox,
-      tocTitleInput,
-      tocDepthInput,
-      papersizeSelect,
-      fontsizeSelect,
-      marginInput,
-    ].forEach((el) => {
-      el.addEventListener('input', buildYaml);
-      el.addEventListener('change', buildYaml);
-    });
+  function copyToClipboard() {
+    const text = yamlOutput.textContent || '';
 
-    // Show/hide TOC extra fields when the toc checkbox changes
-    tocCheckbox.addEventListener('change', function () {
-      updateTocExtraState();
-      buildYaml();
-    });
-
-    // Keep book-specific controls in sync with the selected documentclass.
-    documentclassSelect.addEventListener('change', function () {
-      updateBookOptionsState();
-      // Rebuild YAML after adjusting the controls
-      buildYaml();
-    });
-
-    resetButton.addEventListener('click', function () {
-      resetToDefaults();
-    });
-
-    copyButton.addEventListener('click', function () {
-      const text = yamlOutput.textContent || '';
-
-      // Fallback: use a hidden textarea to reliably copy the exact text (including trailing newlines).
-      if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        // Prevent flashing and keep it out of flow
-        ta.style.position = 'fixed';
-        ta.style.left = '-9999px';
-        ta.setAttribute('aria-hidden', 'true');
-        document.body.appendChild(ta);
-        ta.select();
-        try {
-          document.execCommand('copy');
-          showCopyStatus('Copied to clipboard (fallback).');
-        } catch (e) {
-          showCopyStatus('Select the text and copy manually.');
-        }
-        document.body.removeChild(ta);
-        return;
+    // Fallback: use a hidden textarea to reliably copy the exact text (including trailing newlines).
+    if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      // Prevent flashing and keep it out of flow
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showCopyStatus('Copied to clipboard (fallback).');
+      } catch (e) {
+        showCopyStatus('Select the text and copy manually.');
       }
+      document.body.removeChild(ta);
+      return;
+    }
 
-      navigator.clipboard
-        .writeText(text)
-        .then(function () {
-          showCopyStatus('Copied to clipboard.');
-        })
-        .catch(function () {
-          showCopyStatus('Could not copy. Select the text and copy manually.');
-        });
-    });
+    navigator.clipboard
+      .writeText(text)
+      .then(function () {
+        showCopyStatus('Copied to clipboard.');
+      })
+      .catch(function () {
+        showCopyStatus('Could not copy. Select the text and copy manually.');
+      });
   }
-
   let copyStatusTimeoutId = null;
   function showCopyStatus(message) {
     copyStatus.textContent = message;
@@ -243,35 +205,31 @@
     }, 2500);
   }
 
-  function init() {
-    titleInput.value = DEFAULTS.title;
-    documentclassSelect.value = DEFAULTS.documentclass;
-    optTwocolumn.checked = DEFAULTS.classoptions.includes('twocolumn');
-    optOneside.checked = DEFAULTS.classoptions.includes('oneside');
-    optOpenany.checked = DEFAULTS.classoptions.includes('openany');
-    if (optLandscape) optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
-    tocCheckbox.checked = DEFAULTS.toc;
-    tocTitleInput.value = DEFAULTS.tocTitle;
-    tocDepthInput.value = DEFAULTS.tocDepth;
-    papersizeSelect.value = DEFAULTS.papersize;
-    fontsizeSelect.value = DEFAULTS.fontsize;
-    marginInput.value = DEFAULTS.margin;
-
-    attachListeners();
-    // Ensure book-specific options are shown/hidden appropriately before
-    // building the initial YAML.
-    updateBookOptionsState();
-    updateTocExtraState();
-    buildYaml();
+  function attachListeners() {
+    [
+      titleInput,
+      documentclassSelect,
+      optLandscape,
+      optOneside,
+      optOpenany,
+      optTwocolumn,
+      tocCheckbox,
+      tocTitleInput,
+      tocDepthInput,
+      papersizeSelect,
+      fontsizeSelect,
+      marginInput,
+    ].forEach((el) => {
+      el.addEventListener('input', updateAll);
+      el.addEventListener('change', updateAll);
+    });
+    resetButton.addEventListener('click', resetToDefaults);
+    copyButton.addEventListener('click', copyToClipboard);
   }
 
-  // Show or hide the toc extra inputs depending on the toc checkbox state
-  function updateTocExtraState() {
-    if (tocCheckbox.checked) {
-      tocExtra.style.display = '';
-    } else {
-      tocExtra.style.display = 'none';
-    }
+  function init() {
+    attachListeners();
+    resetToDefaults();
   }
 
   if (document.readyState === 'loading') {
