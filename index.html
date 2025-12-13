@@ -58,10 +58,22 @@
       </div>
 
       <div class="field-group">
-        <label class="checkbox-label label-primary">
-          <input type="checkbox" id="toc-checkbox" checked />
-          <span>Table of Contents</span>
-        </label>
+        <div class="checkbox-group">
+          <label class="checkbox-label label-primary">
+            <input type="checkbox" id="toc-checkbox" checked />
+            <span>Table of Contents</span>
+          </label>
+        </div>
+        <div id="toc-extra" class="toc-extra" style="display: none;">
+          <div class="field-row">
+            <label class="field-label" for="toc-title-input">Title:</label>
+            <input id="toc-title-input" type="text" placeholder="e.g. Contents" />
+          </div>
+          <div class="field-row">
+            <label class="field-label" for="toc-depth-input">Depth:</label>
+            <input id="toc-depth-input" type="text" inputmode="numeric" pattern="\\d*" placeholder="e.g. 2" />
+          </div>
+        </div>
       </div>
 
       <div class="field-group">

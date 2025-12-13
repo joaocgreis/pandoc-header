@@ -6,6 +6,9 @@
   const optOpenany = document.getElementById('opt-openany');
   const optLandscape = document.getElementById('opt-landscape');
   const tocCheckbox = document.getElementById('toc-checkbox');
+  const tocExtra = document.getElementById('toc-extra');
+  const tocTitleInput = document.getElementById('toc-title-input');
+  const tocDepthInput = document.getElementById('toc-depth-input');
   const papersizeSelect = document.getElementById('papersize-select');
   const fontsizeSelect = document.getElementById('fontsize-select');
   const marginInput = document.getElementById('margin-input');
@@ -19,7 +22,9 @@
     title: '',
     documentclass: 'article',
     classoptions: [],
-    toc: true,
+    toc: false,
+    tocTitle: '',
+    tocDepth: '',
     papersize: 'a4',
     fontsize: '12pt',
     margin: '1.5cm',
@@ -90,6 +95,17 @@
 
     if (tocCheckbox.checked) {
       lines.push('toc: true');
+      // Emit optional toc-title and toc-depth immediately after toc
+      const ttl = tocTitleInput && tocTitleInput.value.trim();
+      if (ttl && ttl.length > 0) {
+        const escaped = escapeYamlSingleQuoted(ttl);
+        lines.push("toc-title: '" + escaped + "'");
+      }
+      const depthRaw = tocDepthInput && tocDepthInput.value.trim();
+      // Allow only digits for depth; ignore otherwise
+      if (depthRaw && /^\d+$/.test(depthRaw)) {
+        lines.push('toc-depth: ' + depthRaw);
+      }
     }
 
     const papersize = papersizeSelect.value || DEFAULTS.papersize;
@@ -137,12 +153,15 @@
     if (optLandscape) optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
 
     tocCheckbox.checked = DEFAULTS.toc;
+    if (tocTitleInput) tocTitleInput.value = DEFAULTS.tocTitle;
+    if (tocDepthInput) tocDepthInput.value = DEFAULTS.tocDepth;
     papersizeSelect.value = DEFAULTS.papersize;
     fontsizeSelect.value = DEFAULTS.fontsize;
     marginInput.value = DEFAULTS.margin;
 
     // Ensure UI reflects book-specific visibility rules after resetting
     updateBookOptionsState();
+    updateTocExtraState();
     buildYaml();
   }
 
@@ -155,6 +174,8 @@
       optOpenany,
       optLandscape,
       tocCheckbox,
+      tocTitleInput,
+      tocDepthInput,
       papersizeSelect,
       fontsizeSelect,
       marginInput,
@@ -162,6 +183,14 @@
       el.addEventListener('input', buildYaml);
       el.addEventListener('change', buildYaml);
     });
+
+    // Show/hide TOC extra fields when the toc checkbox changes
+    if (tocCheckbox) {
+      tocCheckbox.addEventListener('change', function () {
+        updateTocExtraState();
+        buildYaml();
+      });
+    }
 
     // Keep book-specific controls in sync with the selected documentclass.
     documentclassSelect.addEventListener('change', function () {
@@ -227,6 +256,8 @@
     optOpenany.checked = DEFAULTS.classoptions.includes('openany');
     if (optLandscape) optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
     tocCheckbox.checked = DEFAULTS.toc;
+    if (tocTitleInput) tocTitleInput.value = DEFAULTS.tocTitle;
+    if (tocDepthInput) tocDepthInput.value = DEFAULTS.tocDepth;
     papersizeSelect.value = DEFAULTS.papersize;
     fontsizeSelect.value = DEFAULTS.fontsize;
     marginInput.value = DEFAULTS.margin;
@@ -235,7 +266,18 @@
     // Ensure book-specific options are shown/hidden appropriately before
     // building the initial YAML.
     updateBookOptionsState();
+    updateTocExtraState();
     buildYaml();
+  }
+
+  // Show or hide the toc extra inputs depending on the toc checkbox state
+  function updateTocExtraState() {
+    if (!tocExtra) return;
+    if (tocCheckbox && tocCheckbox.checked) {
+      tocExtra.style.display = '';
+    } else {
+      tocExtra.style.display = 'none';
+    }
   }
 
   if (document.readyState === 'loading') {
