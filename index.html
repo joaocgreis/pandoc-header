@@ -23,24 +23,20 @@
 
       <div class="field-group">
         <div class="field-row">
-          <label class="field-label" for="title-input">Title:</label>
+          <label class="field-label label-primary" for="title-input">Title:</label>
           <input id="title-input" type="text" placeholder="e.g. The Document Title" />
         </div>
       </div>
 
       <div class="field-group">
         <div class="field-row">
-          <label class="field-label" for="documentclass-select">Document class:</label>
+          <label class="field-label label-primary" for="documentclass-select">Document class:</label>
           <select id="documentclass-select">
             <option value="article" selected>article</option>
             <option value="report">report</option>
             <option value="book">book</option>
           </select>
         </div>
-      </div>
-
-      <div class="field-group">
-        <span class="field-label">Class options</span>
         <div class="checkbox-group">
           <label class="checkbox-label">
             <input type="checkbox" id="opt-landscape" />
@@ -62,15 +58,15 @@
       </div>
 
       <div class="field-group">
-        <label class="checkbox-label">
+        <label class="checkbox-label label-primary">
           <input type="checkbox" id="toc-checkbox" checked />
-          <span>Include table of contents</span>
+          <span>Table of Contents</span>
         </label>
       </div>
 
       <div class="field-group">
         <div class="field-row">
-          <label class="field-label" for="papersize-select">Paper size:</label>
+          <label class="field-label label-primary" for="papersize-select">Paper size:</label>
           <select id="papersize-select">
             <option value="a4" selected>a4</option>
             <option value="letter">letter</option>
@@ -80,7 +76,7 @@
 
       <div class="field-group">
         <div class="field-row">
-          <label class="field-label" for="fontsize-select">Font size:</label>
+          <label class="field-label label-primary" for="fontsize-select">Font size:</label>
           <select id="fontsize-select">
             <option value="10pt">10pt</option>
             <option value="11pt">11pt</option>
@@ -91,7 +87,10 @@
 
       <div class="field-group">
         <div class="field-row">
-          <label class="field-label" for="margin-input">Margin (geometry):</label>
+          <label class="field-label label-primary" for="margin-input">Geometry</label>
+        </div>
+        <div class="field-row">
+          <label class="field-label" for="margin-input">Margin:</label>
           <input id="margin-input" type="text" value="1.5cm" placeholder="e.g. 1.5cm, 2in" />
         </div>
       </div>
