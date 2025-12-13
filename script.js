@@ -45,6 +45,14 @@
     const isTocEnabled = tocCheckbox.checked;
     tocExtra.style.display = isTocEnabled ? '' : 'none';
 
+    // Turn tocDepthInput red if the value is invalid (non-digit)
+    const depthRaw = tocDepthInput && tocDepthInput.value.trim();
+    if (depthRaw && !/^\d*$/.test(depthRaw)) {
+      tocDepthInput.classList.add('input-invalid');
+    } else {
+      tocDepthInput.classList.remove('input-invalid');
+    }
+
     yamlOutput.textContent = buildYaml();
   }
 

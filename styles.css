@@ -143,6 +143,21 @@ select:focus {
   border-color: #2563eb;
 }
 
+/* Visual hint for invalid inputs used by the JS validation */
+.input-invalid {
+  /* accessible red */
+  border: 2px solid #d64545;
+  /* very light red tint */
+  background-color: #fff6f6;
+  /* subtle glow */
+  box-shadow: 0 0 0 3px rgba(214, 69, 69, 0.06);
+  outline: none;
+}
+
+.input-invalid:focus {
+  box-shadow: 0 0 0 4px rgba(214, 69, 69, 0.12);
+}
+
 .checkbox-group {
   display: flex;
   flex-wrap: wrap;
