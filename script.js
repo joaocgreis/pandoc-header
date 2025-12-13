@@ -29,10 +29,30 @@
     const options = [];
     if (optLandscape && optLandscape.checked) options.push('landscape');
     if (optTwocolumn.checked) options.push('twocolumn');
-    if (optOneside.checked) options.push('oneside');
-    if (optOpenany.checked) options.push('openany');
+    // Only include 'oneside' and 'openany' when the documentclass is 'book'
+    const documentclass = documentclassSelect.value || DEFAULTS.documentclass;
+    if (documentclass === 'book') {
+      if (optOneside.checked) options.push('oneside');
+      if (optOpenany.checked) options.push('openany');
+    }
     // Sort options alphabetically to provide stable, predictable output
     return options.sort();
+  }
+
+  // Enable or disable book-specific options in the UI. We remove them
+  // from the document flow (display: none) rather than disabling them.
+  function updateBookOptionsState() {
+    const isBook = (documentclassSelect.value || DEFAULTS.documentclass) === 'book';
+    // The inputs are wrapped in <label class="checkbox-label">; hide that label
+    // so the checkbox and its text disappear from the flow.
+    if (optOneside) {
+      const label = optOneside.closest('.checkbox-label') || optOneside.parentElement;
+      if (label && label.style) label.style.display = isBook ? '' : 'none';
+    }
+    if (optOpenany) {
+      const label = optOpenany.closest('.checkbox-label') || optOpenany.parentElement;
+      if (label && label.style) label.style.display = isBook ? '' : 'none';
+    }
   }
 
   // Return a sorted shallow copy of an array of strings. Non-strings are coerced to strings.
@@ -121,6 +141,8 @@
     fontsizeSelect.value = DEFAULTS.fontsize;
     marginInput.value = DEFAULTS.margin;
 
+    // Ensure UI reflects book-specific visibility rules after resetting
+    updateBookOptionsState();
     buildYaml();
   }
 
@@ -139,6 +161,13 @@
     ].forEach((el) => {
       el.addEventListener('input', buildYaml);
       el.addEventListener('change', buildYaml);
+    });
+
+    // Keep book-specific controls in sync with the selected documentclass.
+    documentclassSelect.addEventListener('change', function () {
+      updateBookOptionsState();
+      // Rebuild YAML after adjusting the controls
+      buildYaml();
     });
 
     resetButton.addEventListener('click', function () {
@@ -203,6 +232,9 @@
     marginInput.value = DEFAULTS.margin;
 
     attachListeners();
+    // Ensure book-specific options are shown/hidden appropriately before
+    // building the initial YAML.
+    updateBookOptionsState();
     buildYaml();
   }
 
