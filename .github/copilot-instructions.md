@@ -44,3 +44,15 @@
   - Wire it in `script.js` alongside existing inputs, and update `buildYaml()` respecting the omission rules above.
   - When updating YAML generation, ensure `buildYaml()` preserves the rule that the YAML output finishes with exactly three trailing newlines. The code uses a final string concatenation to append `"\n\n\n"` so copy operations and previews include the trailing blank lines.
   - Update `README.md` and this file if the behavior or defaults change.
+
+### Sorting sub-objects and arrays
+
+- **Rule:** Any sub-objects or arrays emitted as YAML values (for example lists under `classoption:` or `geometry:`) MUST be emitted in sorted order (alphabetically) to ensure deterministic output. The top-level YAML keys (the root keys emitted as individual lines) must keep the existing emission order used by `buildYaml()`; only the contents of arrays/sub-objects should be reordered.
+- When modifying `script.js` or `buildYaml()`, use or add small helpers to produce sorted copies of arrays (do not mutate input state unexpectedly). Keep the top-level key emission sequence unchanged.
+
+Examples:
+
+- Correct: `classoption:` list emitted as `- landscape`, `- openany`, `- twocolumn` (alphabetical)
+- Incorrect: emitting classoptions in arbitrary or input order
+
+This rule ensures stable diffs and predictable YAML for users and downstream tooling.

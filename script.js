@@ -35,6 +35,12 @@
     return options.sort();
   }
 
+  // Return a sorted shallow copy of an array of strings. Non-strings are coerced to strings.
+  function sortedCopy(arr) {
+    if (!Array.isArray(arr)) return arr;
+    return arr.slice().map((v) => String(v)).sort();
+  }
+
   function escapeYamlSingleQuoted(str) {
     return str.replace(/'/g, "''");
   }
@@ -56,7 +62,8 @@
     const classoptions = getSelectedClassoptions();
     if (classoptions.length > 0) {
       lines.push('classoption:');
-      classoptions.forEach((opt) => {
+      // Emit classoptions in sorted order for stable YAML output
+      sortedCopy(classoptions).forEach((opt) => {
         lines.push('- ' + opt);
       });
     }
@@ -84,7 +91,8 @@
 
     if (geometryLines.length > 0) {
       lines.push('geometry:');
-      geometryLines.forEach((g) => {
+      // Emit geometry flags in sorted order to keep arrays deterministic
+      sortedCopy(geometryLines).forEach((g) => {
         lines.push('- ' + g);
       });
     }
