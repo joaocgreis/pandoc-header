@@ -88,7 +88,11 @@
 
     lines.push('---');
 
-    yamlOutput.textContent = lines.join('\n');
+    // Ensure the YAML output always ends with exactly three newlines.
+    // Build the base YAML string (no trailing newlines), then append three newlines.
+    const baseYaml = lines.join('\n');
+    const finalYaml = baseYaml + '\n\n\n';
+    yamlOutput.textContent = finalYaml;
   }
 
   function resetToDefaults() {
@@ -131,18 +135,22 @@
     copyButton.addEventListener('click', function () {
       const text = yamlOutput.textContent || '';
       if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
-        const range = document.createRange();
-        range.selectNodeContents(yamlOutput);
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
+        // Fallback: use a hidden textarea to reliably copy the exact text (including trailing newlines).
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        // Prevent flashing and keep it out of flow
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        ta.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(ta);
+        ta.select();
         try {
           document.execCommand('copy');
           showCopyStatus('Copied to clipboard (fallback).');
         } catch (e) {
           showCopyStatus('Select the text and copy manually.');
         }
-        sel.removeAllRanges();
+        document.body.removeChild(ta);
         return;
       }
 

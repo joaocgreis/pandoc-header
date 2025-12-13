@@ -19,6 +19,7 @@
   - Reads values from form controls (via `getElementById`).
   - Maintains implicit state via DOM values plus a `DEFAULTS` object.
   - Rebuilds the YAML string on each `input` / `change` event and writes it into the preview `<pre>` as `textContent`.
+    - Ensures the generated YAML always ends with exactly three newline characters (`"\n\n\n"`).
   - Implements clipboard copying using `navigator.clipboard.writeText` with a `document.execCommand('copy')` fallback.
   - Exposes a **Reset** button that restores controls to the default example header.
 
@@ -41,4 +42,5 @@
 - When adding new options (e.g. extra geometry flags or more `classoption` values):
   - Add the control in `index.html`.
   - Wire it in `script.js` alongside existing inputs, and update `buildYaml()` respecting the omission rules above.
+  - When updating YAML generation, ensure `buildYaml()` preserves the rule that the YAML output finishes with exactly three trailing newlines. The code uses a final string concatenation to append `"\n\n\n"` so copy operations and previews include the trailing blank lines.
   - Update `README.md` and this file if the behavior or defaults change.
