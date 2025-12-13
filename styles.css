@@ -80,11 +80,11 @@ body {
 input[type='text'],
 select {
   width: 100%;
-  max-width: 260px;
   padding: 0.35rem 0.5rem;
   border-radius: 0.35rem;
   border: 1px solid #cbd2e1;
   font-size: 0.95rem;
+  min-width: 0;
 }
 
 input[type='text']:focus,
