@@ -32,7 +32,7 @@
 
   function getSelectedClassoptions() {
     const options = [];
-    if (optLandscape && optLandscape.checked) options.push('landscape');
+    if (optLandscape.checked) options.push('landscape');
     if (optTwocolumn.checked) options.push('twocolumn');
     // Only include 'oneside' and 'openany' when the documentclass is 'book'
     const documentclass = documentclassSelect.value || DEFAULTS.documentclass;
@@ -50,14 +50,10 @@
     const isBook = (documentclassSelect.value || DEFAULTS.documentclass) === 'book';
     // The inputs are wrapped in <label class="checkbox-label">; hide that label
     // so the checkbox and its text disappear from the flow.
-    if (optOneside) {
-      const label = optOneside.closest('.checkbox-label') || optOneside.parentElement;
-      if (label && label.style) label.style.display = isBook ? '' : 'none';
-    }
-    if (optOpenany) {
-      const label = optOpenany.closest('.checkbox-label') || optOpenany.parentElement;
-      if (label && label.style) label.style.display = isBook ? '' : 'none';
-    }
+    const labelOneside = optOneside.closest('.checkbox-label') || optOneside.parentElement;
+    if (labelOneside && labelOneside.style) labelOneside.style.display = isBook ? '' : 'none';
+    const labelOpenany = optOpenany.closest('.checkbox-label') || optOpenany.parentElement;
+    if (labelOpenany && labelOpenany.style) labelOpenany.style.display = isBook ? '' : 'none';
   }
 
   // Return a sorted shallow copy of an array of strings. Non-strings are coerced to strings.
@@ -150,11 +146,11 @@
     optTwocolumn.checked = DEFAULTS.classoptions.includes('twocolumn');
     optOneside.checked = DEFAULTS.classoptions.includes('oneside');
     optOpenany.checked = DEFAULTS.classoptions.includes('openany');
-    if (optLandscape) optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
+    optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
 
     tocCheckbox.checked = DEFAULTS.toc;
-    if (tocTitleInput) tocTitleInput.value = DEFAULTS.tocTitle;
-    if (tocDepthInput) tocDepthInput.value = DEFAULTS.tocDepth;
+    tocTitleInput.value = DEFAULTS.tocTitle;
+    tocDepthInput.value = DEFAULTS.tocDepth;
     papersizeSelect.value = DEFAULTS.papersize;
     fontsizeSelect.value = DEFAULTS.fontsize;
     marginInput.value = DEFAULTS.margin;
@@ -185,12 +181,10 @@
     });
 
     // Show/hide TOC extra fields when the toc checkbox changes
-    if (tocCheckbox) {
-      tocCheckbox.addEventListener('change', function () {
-        updateTocExtraState();
-        buildYaml();
-      });
-    }
+    tocCheckbox.addEventListener('change', function () {
+      updateTocExtraState();
+      buildYaml();
+    });
 
     // Keep book-specific controls in sync with the selected documentclass.
     documentclassSelect.addEventListener('change', function () {
@@ -205,8 +199,9 @@
 
     copyButton.addEventListener('click', function () {
       const text = yamlOutput.textContent || '';
+
+      // Fallback: use a hidden textarea to reliably copy the exact text (including trailing newlines).
       if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
-        // Fallback: use a hidden textarea to reliably copy the exact text (including trailing newlines).
         const ta = document.createElement('textarea');
         ta.value = text;
         // Prevent flashing and keep it out of flow
@@ -256,8 +251,8 @@
     optOpenany.checked = DEFAULTS.classoptions.includes('openany');
     if (optLandscape) optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
     tocCheckbox.checked = DEFAULTS.toc;
-    if (tocTitleInput) tocTitleInput.value = DEFAULTS.tocTitle;
-    if (tocDepthInput) tocDepthInput.value = DEFAULTS.tocDepth;
+    tocTitleInput.value = DEFAULTS.tocTitle;
+    tocDepthInput.value = DEFAULTS.tocDepth;
     papersizeSelect.value = DEFAULTS.papersize;
     fontsizeSelect.value = DEFAULTS.fontsize;
     marginInput.value = DEFAULTS.margin;
@@ -272,8 +267,7 @@
 
   // Show or hide the toc extra inputs depending on the toc checkbox state
   function updateTocExtraState() {
-    if (!tocExtra) return;
-    if (tocCheckbox && tocCheckbox.checked) {
+    if (tocCheckbox.checked) {
       tocExtra.style.display = '';
     } else {
       tocExtra.style.display = 'none';
