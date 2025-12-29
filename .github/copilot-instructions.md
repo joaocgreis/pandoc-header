@@ -61,3 +61,23 @@ Examples:
 - Incorrect: emitting classoptions in arbitrary or input order
 
 This rule ensures stable diffs and predictable YAML for users and downstream tooling.
+
+### Adding header-includes entries
+
+- **Pattern:** When adding a new LaTeX package checkbox (e.g., `nowidow`, `emptypage`):
+  - Add a checkbox in `index.html` with id format `{package-name}-checkbox` (e.g., `id="nowidow-checkbox"`).
+  - The checkbox label text should match the comment that appears in the YAML output.
+  - In `script.js`:
+    - Add the element reference: `const {packageName}Checkbox = document.getElementById('{package-name}-checkbox');`
+    - Add to DEFAULTS: `{packageName}: true` (or `false` for unchecked by default)
+    - In `buildYaml()`, add to the `headerIncludes` array conditionally:
+      ```javascript
+      if ({packageName}Checkbox.checked) {
+        headerIncludes.push("- '`\\\\usepackage{packagename}`{=latex}' # Comment text");
+      }
+      ```
+    - For packages with options, use: `\\\\usepackage[option]{packagename}`
+    - Add to `resetToDefaults()`: `{packageName}Checkbox.checked = DEFAULTS.{packageName};`
+    - Add to `attachListeners()` array
+  - The `header-includes:` key is only emitted when the `headerIncludes` array has at least one entry.
+  - Items in `headerIncludes` are emitted in sorted order to ensure deterministic output.

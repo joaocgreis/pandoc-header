@@ -21,6 +21,7 @@
   const mainfontSelect = document.getElementById('mainfont-select');
   const sansfontSelect = document.getElementById('sansfont-select');
   const monofontSelect = document.getElementById('monofont-select');
+  const nowidowCheckbox = document.getElementById('nowidow-checkbox');
 
   const yamlOutput = document.getElementById('yaml-output');
   const copyButton = document.getElementById('copy-button');
@@ -57,6 +58,7 @@
     mainfont: 'Noto Serif',
     sansfont: 'Noto Sans',
     monofont: 'Noto Sans Mono',
+    nowidow: true,
   };
 
   // Enable or disable specific options in the UI. We remove them
@@ -171,9 +173,19 @@
       });
     }
 
+    const headerIncludes = [];
     if (emptypageCheckbox.checked) {
+      headerIncludes.push("- '`\\\\usepackage{emptypage}`{=latex}' # Do not print page numbers and headings on empty pages");
+    }
+    if (nowidowCheckbox.checked) {
+      headerIncludes.push("- '`\\\\usepackage[all]{nowidow}`{=latex}' # Avoid widow and orphan lines");
+    }
+    if (headerIncludes.length > 0) {
       lines.push('header-includes:');
-      lines.push("- '`\\\\usepackage{emptypage}`{=latex}' # Do not print page numbers and headings on empty pages");
+      // Emit header-includes in sorted order for stability
+      sortedCopy(headerIncludes).forEach((h) => {
+        lines.push(h);
+      });
     }
 
     const mainfont = mainfontSelect.value && mainfontSelect.value.trim();
@@ -269,6 +281,8 @@
     mainfontSelect.value = DEFAULTS.mainfont;
     sansfontSelect.value = DEFAULTS.sansfont;
     monofontSelect.value = DEFAULTS.monofont;
+
+    nowidowCheckbox.checked = DEFAULTS.nowidow;
 
     updateAll();
   }
@@ -381,6 +395,7 @@
       mainfontSelect,
       sansfontSelect,
       monofontSelect,
+      nowidowCheckbox,
     ].forEach((el) => {
       el.addEventListener('input', updateAll);
       el.addEventListener('change', updateAll);
