@@ -2,6 +2,7 @@
   const titleInput = document.getElementById('title-input');
   const subtitleInput = document.getElementById('subtitle-input');
   const dateInput = document.getElementById('date-input');
+  const authorsContainer = document.getElementById('authors-container');
   const documentclassSelect = document.getElementById('documentclass-select');
   const optLandscape = document.getElementById('opt-landscape');
   const optOneside = document.getElementById('opt-oneside');
@@ -40,6 +41,7 @@
     title: '',
     subtitle: '',
     date: '',
+    authors: [],
     documentclass: 'article',
     classoptions: [],
     toc: false,
@@ -101,6 +103,19 @@
     if (rawDate && rawDate.length > 0) {
       const escapedDate = escapeYamlSingleQuoted(rawDate);
       lines.push("date: '" + escapedDate + "'");
+    }
+
+    const authors = getAuthorValues();
+    if (authors.length === 1) {
+      const escapedAuthor = escapeYamlSingleQuoted(authors[0]);
+      lines.push("author: '" + escapedAuthor + "'");
+    } else if (authors.length > 0) {
+      lines.push('author:');
+      // Emit authors in the order specified by the user
+      authors.forEach((a) => {
+        const escaped = escapeYamlSingleQuoted(a);
+        lines.push("- '" + escaped + "'");
+      });
     }
 
     const documentclass = documentclassSelect.value || DEFAULTS.documentclass;
@@ -221,6 +236,9 @@
     titleInput.value = DEFAULTS.title;
     subtitleInput.value = DEFAULTS.subtitle;
     dateInput.value = DEFAULTS.date;
+    // Reset authors: clear container and add a single empty input
+    authorsContainer.innerHTML = '';
+    addAuthorInput('');
 
     documentclassSelect.value = DEFAULTS.documentclass;
     optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
@@ -245,6 +263,48 @@
     monofontSelect.value = DEFAULTS.monofont;
 
     updateAll();
+  }
+
+  // Dynamic authors input handling
+  let authorInputCounter = 0;
+  function addAuthorInput(initialValue) {
+    const idx = authorInputCounter++;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'field-multi-input';
+    input.id = 'field-multi-input-' + idx;
+    input.placeholder = 'e.g. First Last';
+    input.value = initialValue || '';
+
+    input.addEventListener('input', function () {
+      updateAll();
+      // If this is the last input and it's non-empty, append a new empty input
+      const all = Array.from(authorsContainer.querySelectorAll('.field-multi-input'));
+      if (all.length && all[all.length - 1] === input && input.value.trim().length > 0) {
+        addAuthorInput('');
+      }
+    });
+
+    input.addEventListener('blur', function () {
+      // If input is empty on blur and this is not the last input, remove it
+      const val = input.value.trim();
+      const all = Array.from(authorsContainer.querySelectorAll('.field-multi-input'));
+      if (all.length && all[all.length - 1] !== input && val.length === 0) {
+        // remove the element
+        authorsContainer.removeChild(input);
+        updateAll();
+      }
+    });
+
+    authorsContainer.appendChild(input);
+    return input;
+  }
+
+  function getAuthorValues() {
+    return Array
+      .from(authorsContainer.querySelectorAll('.field-multi-input'))
+      .map((i) => (i.value || '').trim())
+      .filter((v) => v.length > 0);
   }
 
   function copyToClipboard() {

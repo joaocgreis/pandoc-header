@@ -83,7 +83,7 @@ body {
 }
 
 .field-group {
-  margin-bottom: 1rem;
+  margin-bottom: 0.25rem;
 }
 
 /* Indent every element in a field-group after the first to visually group them */
@@ -105,8 +105,42 @@ body {
   vertical-align: baseline;
 }
 
+/* Multi-row field layout (e.g. authors) matching field-row appearance */
+.field-multi {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.field-multi .field-label {
+  padding-top: 0.35rem;
+  line-height: 1.4;
+}
+
+.field-multi-inputs {
+  display: flex;
+  flex-direction: column;
+  column-gap: 0.5rem;
+  row-gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.field-multi-input {
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid #cbd2e1;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  height: 2.2rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
 /* Apply bold only to explicitly marked primary labels */
 .label-primary {
+  margin-top: 1rem;
   font-weight: 600;
 }
 
