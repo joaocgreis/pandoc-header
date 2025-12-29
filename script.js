@@ -17,6 +17,7 @@
   const marginInput = document.getElementById('margin-input');
   const optFallbacks = document.getElementById('opt-fallbacks');
   const optFallbacksCJK = document.getElementById('opt-fallbacks-cjk');
+  const emptypageCheckbox = document.getElementById('emptypage-checkbox');
   const mainfontSelect = document.getElementById('mainfont-select');
   const sansfontSelect = document.getElementById('sansfont-select');
   const monofontSelect = document.getElementById('monofont-select');
@@ -50,6 +51,7 @@
     papersize: 'a4',
     fontsize: '12pt',
     margin: '1.5cm',
+    emptypage: true,
     fallbacks: true,
     fallbacksCJK: false,
     mainfont: 'Noto Serif',
@@ -169,6 +171,11 @@
       });
     }
 
+    if (emptypageCheckbox.checked) {
+      lines.push('header-includes:');
+      lines.push("- '`\\\\usepackage{emptypage}`{=latex}' # Do not print page numbers and headings on empty pages");
+    }
+
     const mainfont = mainfontSelect.value && mainfontSelect.value.trim();
     if (mainfont && mainfont.length > 0) addFont('main', mainfont, lines);
     const sansfont = sansfontSelect.value && sansfontSelect.value.trim();
@@ -256,6 +263,7 @@
 
     marginInput.value = DEFAULTS.margin;
 
+    emptypageCheckbox.checked = DEFAULTS.emptypage;
     optFallbacks.checked = DEFAULTS.fallbacks;
     optFallbacksCJK.checked = DEFAULTS.fallbacksCJK;
     mainfontSelect.value = DEFAULTS.mainfont;
@@ -367,6 +375,7 @@
       papersizeSelect,
       fontsizeSelect,
       marginInput,
+      emptypageCheckbox,
       optFallbacks,
       optFallbacksCJK,
       mainfontSelect,
