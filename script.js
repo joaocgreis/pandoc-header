@@ -21,8 +21,15 @@
   const mainfontSelect = document.getElementById('mainfont-select');
   const sansfontSelect = document.getElementById('sansfont-select');
   const monofontSelect = document.getElementById('monofont-select');
+  const linksAsNotesCheckbox = document.getElementById('links-as-notes-checkbox');
   const nowidowCheckbox = document.getElementById('nowidow-checkbox');
   const fvextraCheckbox = document.getElementById('fvextra-checkbox');
+  const framedCheckbox = document.getElementById('framed-checkbox');
+  const sloppyCheckbox = document.getElementById('sloppy-checkbox');
+  const disableUnderfullHboxCheckbox = document.getElementById('disable-underfull-hbox-checkbox');
+  const titlesecCompactCheckbox = document.getElementById('titlesec-compact-checkbox');
+  const sectionNewPageCheckbox = document.getElementById('section-new-page-checkbox');
+  const tocTwocolumnCheckbox = document.getElementById('toc-twocolumn-checkbox');
 
   const yamlOutput = document.getElementById('yaml-output');
   const copyButton = document.getElementById('copy-button');
@@ -59,8 +66,15 @@
     mainfont: 'Noto Serif',
     sansfont: 'Noto Sans',
     monofont: 'Noto Sans Mono',
+    linksAsNotes: true,
     nowidow: true,
     fvextra: true,
+    framed: false,
+    sloppy: false,
+    disableUnderfullHbox: false,
+    titlesecCompact: false,
+    sectionNewPage: false,
+    tocTwocolumn: false,
   };
 
   // Enable or disable specific options in the UI. We remove them
@@ -73,6 +87,10 @@
     if (labelOneside && labelOneside.style) labelOneside.style.display = isBook ? '' : 'none';
     const labelOpenany = optOpenany.closest('.checkbox-label') || optOpenany.parentElement;
     if (labelOpenany && labelOpenany.style) labelOpenany.style.display = isBook ? '' : 'none';
+    // Show or hide toc-twocolumn checkbox depending on twocolumn option
+    const isTwocolumn = optTwocolumn.checked;
+    const labelTocTwocolumn = tocTwocolumnCheckbox.closest('.checkbox-label') || tocTwocolumnCheckbox.parentElement;
+    if (labelTocTwocolumn && labelTocTwocolumn.style) labelTocTwocolumn.style.display = isTwocolumn ? '' : 'none';
 
     // Show or hide the toc extra inputs depending on the toc checkbox state
     const isTocEnabled = tocCheckbox.checked;
@@ -175,6 +193,10 @@
       });
     }
 
+    if (linksAsNotesCheckbox.checked) {
+      lines.push('links-as-notes: true');
+    }
+
     const headerIncludes = [];
     if (emptypageCheckbox.checked) {
       headerIncludes.push("- '`\\\\usepackage{emptypage}`{=latex}' # Do not print page numbers and headings on empty pages");
@@ -182,8 +204,27 @@
     if (fvextraCheckbox.checked) {
       headerIncludes.push("- | # Improved code blocks (requires highlighting language to be specified)\n  \`\`\`{=latex}\n  \\\\usepackage{fvextra}\n  \\\\fvset{breaklines}\n  \\\\fvset{breaknonspaceingroup}\n  \\\\fvset{breakanywhere}\n  \`\`\`");
     }
+    if (framedCheckbox.checked) {
+      headerIncludes.push("- | # Show frames around code blocks\n  \`\`\`{=latex}\n  \\\\usepackage{framed}\n  \\\\renewenvironment{Shaded}{\\\\begin{oframed}}{\\\\end{oframed}}\n  \`\`\`");
+    }
     if (nowidowCheckbox.checked) {
       headerIncludes.push("- '`\\\\usepackage[all]{nowidow}`{=latex}' # Avoid widow and orphan lines");
+    }
+    if (sloppyCheckbox.checked) {
+      headerIncludes.push("- '`\\\\sloppy`{=latex}' # Allow a lot of space between words for better alignment");
+    }
+    if (disableUnderfullHboxCheckbox.checked) {
+      headerIncludes.push("- '`\\\\hbadness=99999`{=latex}' # Disable Underfull hbox warnings");
+    }
+    if (titlesecCompactCheckbox.checked) {
+      headerIncludes.push("- '`\\\\usepackage[compact]{titlesec}`{=latex}' # Make headings take less space");
+    }
+    if (sectionNewPageCheckbox.checked) {
+      headerIncludes.push("- '`\\\\newcommand{\\\\sectionbreak}{\\\\clearpage}`{=latex}' # Start a new page with each section");
+    }
+    const isTwocolumn = optTwocolumn.checked;
+    if (isTwocolumn && tocTwocolumnCheckbox.checked) {
+      headerIncludes.push("- | # Make toc in twocolumn mode\n  \`\`\`{=latex}\n  \\\\makeatletter\n  \\\\renewcommand\\\\tableofcontents{%\n    \\\\chapter*{\\\\contentsname\n      \\\\@mkboth{%\n        \\\\MakeUppercase\\\\contentsname}{\\\\MakeUppercase\\\\contentsname}}%\n    \\\\@starttoc{toc}%\n  }\n  \\\\makeatother\n  \`\`\`");
     }
     if (headerIncludes.length > 0) {
       lines.push('header-includes:');
@@ -287,8 +328,15 @@
     sansfontSelect.value = DEFAULTS.sansfont;
     monofontSelect.value = DEFAULTS.monofont;
 
+    linksAsNotesCheckbox.checked = DEFAULTS.linksAsNotes;
     nowidowCheckbox.checked = DEFAULTS.nowidow;
     fvextraCheckbox.checked = DEFAULTS.fvextra;
+    framedCheckbox.checked = DEFAULTS.framed;
+    sloppyCheckbox.checked = DEFAULTS.sloppy;
+    disableUnderfullHboxCheckbox.checked = DEFAULTS.disableUnderfullHbox;
+    titlesecCompactCheckbox.checked = DEFAULTS.titlesecCompact;
+    sectionNewPageCheckbox.checked = DEFAULTS.sectionNewPage;
+    tocTwocolumnCheckbox.checked = DEFAULTS.tocTwocolumn;
 
     updateAll();
   }
@@ -401,8 +449,15 @@
       mainfontSelect,
       sansfontSelect,
       monofontSelect,
+      linksAsNotesCheckbox,
       nowidowCheckbox,
       fvextraCheckbox,
+      framedCheckbox,
+      sloppyCheckbox,
+      disableUnderfullHboxCheckbox,
+      titlesecCompactCheckbox,
+      sectionNewPageCheckbox,
+      tocTwocolumnCheckbox,
     ].forEach((el) => {
       el.addEventListener('input', updateAll);
       el.addEventListener('change', updateAll);
