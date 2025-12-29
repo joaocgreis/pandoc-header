@@ -22,6 +22,7 @@
   const sansfontSelect = document.getElementById('sansfont-select');
   const monofontSelect = document.getElementById('monofont-select');
   const nowidowCheckbox = document.getElementById('nowidow-checkbox');
+  const fvextraCheckbox = document.getElementById('fvextra-checkbox');
 
   const yamlOutput = document.getElementById('yaml-output');
   const copyButton = document.getElementById('copy-button');
@@ -59,6 +60,7 @@
     sansfont: 'Noto Sans',
     monofont: 'Noto Sans Mono',
     nowidow: true,
+    fvextra: true,
   };
 
   // Enable or disable specific options in the UI. We remove them
@@ -177,6 +179,9 @@
     if (emptypageCheckbox.checked) {
       headerIncludes.push("- '`\\\\usepackage{emptypage}`{=latex}' # Do not print page numbers and headings on empty pages");
     }
+    if (fvextraCheckbox.checked) {
+      headerIncludes.push("- | # Improved code blocks (requires highlighting language to be specified)\n  \`\`\`{=latex}\n  \\\\usepackage{fvextra}\n  \\\\fvset{breaklines}\n  \\\\fvset{breaknonspaceingroup}\n  \\\\fvset{breakanywhere}\n  \`\`\`");
+    }
     if (nowidowCheckbox.checked) {
       headerIncludes.push("- '`\\\\usepackage[all]{nowidow}`{=latex}' # Avoid widow and orphan lines");
     }
@@ -283,6 +288,7 @@
     monofontSelect.value = DEFAULTS.monofont;
 
     nowidowCheckbox.checked = DEFAULTS.nowidow;
+    fvextraCheckbox.checked = DEFAULTS.fvextra;
 
     updateAll();
   }
@@ -396,6 +402,7 @@
       sansfontSelect,
       monofontSelect,
       nowidowCheckbox,
+      fvextraCheckbox,
     ].forEach((el) => {
       el.addEventListener('input', updateAll);
       el.addEventListener('change', updateAll);
