@@ -199,32 +199,32 @@
 
     const headerIncludes = [];
     if (emptypageCheckbox.checked) {
-      headerIncludes.push("- '`\\\\usepackage{emptypage}`{=latex}' # Do not print page numbers and headings on empty pages");
+      headerIncludes.push("- '`\\usepackage{emptypage}`{=latex}' # Do not print page numbers and headings on empty pages");
     }
     if (fvextraCheckbox.checked) {
-      headerIncludes.push("- | # Improved code blocks (requires highlighting language to be specified)\n  \`\`\`{=latex}\n  \\\\usepackage{fvextra}\n  \\\\fvset{breaklines}\n  \\\\fvset{breaknonspaceingroup}\n  \\\\fvset{breakanywhere}\n  \`\`\`");
+      headerIncludes.push("- | # Improved code blocks (requires highlighting language to be specified)\n  ```{=latex}\n  \\usepackage{fvextra}\n  \\fvset{breaklines}\n  \\fvset{breaknonspaceingroup}\n  \\fvset{breakanywhere}\n  ```");
     }
     if (framedCheckbox.checked) {
-      headerIncludes.push("- | # Show frames around code blocks\n  \`\`\`{=latex}\n  \\\\usepackage{framed}\n  \\\\renewenvironment{Shaded}{\\\\begin{oframed}}{\\\\end{oframed}}\n  \`\`\`");
+      headerIncludes.push("- | # Show frames around code blocks\n  ```{=latex}\n  \\usepackage{framed}\n  \\renewenvironment{Shaded}{\\begin{oframed}}{\\end{oframed}}\n  ```");
     }
     if (nowidowCheckbox.checked) {
-      headerIncludes.push("- '`\\\\usepackage[all]{nowidow}`{=latex}' # Avoid widow and orphan lines");
+      headerIncludes.push("- '`\\usepackage[all]{nowidow}`{=latex}' # Avoid widow and orphan lines");
     }
     if (sloppyCheckbox.checked) {
-      headerIncludes.push("- '`\\\\sloppy`{=latex}' # Allow a lot of space between words for better alignment");
+      headerIncludes.push("- '`\\sloppy`{=latex}' # Allow a lot of space between words for better alignment");
     }
     if (disableUnderfullHboxCheckbox.checked) {
-      headerIncludes.push("- '`\\\\hbadness=99999`{=latex}' # Disable Underfull hbox warnings");
+      headerIncludes.push("- '`\\hbadness=99999`{=latex}' # Disable Underfull hbox warnings");
     }
     if (titlesecCompactCheckbox.checked) {
-      headerIncludes.push("- '`\\\\usepackage[compact]{titlesec}`{=latex}' # Make headings take less space");
+      headerIncludes.push("- '`\\usepackage[compact]{titlesec}`{=latex}' # Make headings take less space");
     }
     if (sectionNewPageCheckbox.checked) {
-      headerIncludes.push("- '`\\\\newcommand{\\\\sectionbreak}{\\\\clearpage}`{=latex}' # Start a new page with each section");
+      headerIncludes.push("- '`\\newcommand{\\sectionbreak}{\\clearpage}`{=latex}' # Start a new page with each section");
     }
     const isTwocolumn = optTwocolumn.checked;
     if (isTwocolumn && tocTwocolumnCheckbox.checked) {
-      headerIncludes.push("- | # Make toc in twocolumn mode\n  \`\`\`{=latex}\n  \\\\makeatletter\n  \\\\renewcommand\\\\tableofcontents{%\n    \\\\chapter*{\\\\contentsname\n      \\\\@mkboth{%\n        \\\\MakeUppercase\\\\contentsname}{\\\\MakeUppercase\\\\contentsname}}%\n    \\\\@starttoc{toc}%\n  }\n  \\\\makeatother\n  \`\`\`");
+      headerIncludes.push("- | # Make toc in twocolumn mode\n  ```{=latex}\n  \\makeatletter\n  \\renewcommand\\tableofcontents{%\n    \\chapter*{\\contentsname\n      \\@mkboth{%\n        \\MakeUppercase\\contentsname}{\\MakeUppercase\\contentsname}}%\n    \\@starttoc{toc}%\n  }\n  \\makeatother\n  ```");
     }
     if (headerIncludes.length > 0) {
       lines.push('header-includes:');
