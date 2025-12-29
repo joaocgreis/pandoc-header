@@ -32,30 +32,51 @@
 
       <div class="field-group">
         <div class="field-row">
-          <label class="field-label label-primary" for="documentclass-select">Document class:</label>
-          <select id="documentclass-select">
-            <option value="article" selected>article</option>
-            <option value="report">report</option>
-            <option value="book">book</option>
+          <label class="field-label label-primary">Page</label>
+        </div>
+        <div class="field-group">
+          <div class="field-row">
+            <label class="field-label" for="documentclass-select">Document class:</label>
+            <select id="documentclass-select">
+              <option value="article" selected>article</option>
+              <option value="report">report</option>
+              <option value="book">book</option>
+            </select>
+          </div>
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="opt-landscape" />
+              <span>landscape</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="opt-openany" />
+              <span>openany</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="opt-oneside" />
+              <span>oneside</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="opt-twocolumn" />
+              <span>twocolumn</span>
+            </label>
+          </div>
+        </div>
+        <div class="field-row">
+          <label class="field-label" for="papersize-select">Paper size:</label>
+          <select id="papersize-select">
+            <option value="a4" selected>a4</option>
+            <option value="letter">letter</option>
           </select>
         </div>
-        <div class="checkbox-group">
-          <label class="checkbox-label">
-            <input type="checkbox" id="opt-landscape" />
-            <span>landscape</span>
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" id="opt-openany" />
-            <span>openany</span>
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" id="opt-oneside" />
-            <span>oneside</span>
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" id="opt-twocolumn" />
-            <span>twocolumn</span>
-          </label>
+        <div class="field-group">
+          <div class="field-row">
+            <label class="field-label">Geometry</label>
+          </div>
+          <div class="field-row">
+            <label class="field-label" for="margin-input">Margin:</label>
+            <input id="margin-input" type="text" value="1.5cm" placeholder="e.g. 1.5cm, 2in" />
+          </div>
         </div>
       </div>
 
@@ -80,48 +101,15 @@
 
       <div class="field-group">
         <div class="field-row">
-          <label class="field-label label-primary" for="papersize-select">Paper size:</label>
-          <select id="papersize-select">
-            <option value="a4" selected>a4</option>
-            <option value="letter">letter</option>
-          </select>
+          <label class="field-label label-primary">Fonts</label>
         </div>
-      </div>
-
-      <div class="field-group">
         <div class="field-row">
-          <label class="field-label label-primary" for="fontsize-select">Font size:</label>
+          <label class="field-label" for="fontsize-select">Font size:</label>
           <select id="fontsize-select">
             <option value="10pt">10pt</option>
             <option value="11pt">11pt</option>
             <option value="12pt" selected>12pt</option>
           </select>
-        </div>
-      </div>
-
-      <div class="field-group">
-        <div class="field-row">
-          <label class="field-label label-primary" for="margin-input">Geometry</label>
-        </div>
-        <div class="field-row">
-          <label class="field-label" for="margin-input">Margin:</label>
-          <input id="margin-input" type="text" value="1.5cm" placeholder="e.g. 1.5cm, 2in" />
-        </div>
-      </div>
-
-      <div class="field-group">
-        <div class="field-row">
-          <label class="field-label label-primary">Fonts</label>
-        </div>
-        <div class="checkbox-group">
-          <label class="checkbox-label">
-            <input type="checkbox" id="opt-fallbacks" checked />
-            <span>Add emoji/symbol fallbacks</span>
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" id="opt-fallbacks-cjk" />
-            <span>Add CJK fallbacks</span>
-          </label>
         </div>
         <div class="field-row">
           <label class="field-label" for="mainfont-select">Main:</label>
@@ -134,6 +122,16 @@
         <div class="field-row">
           <label class="field-label" for="monofont-select">Mono:</label>
           <select id="monofont-select"></select>
+        </div>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="opt-fallbacks" checked />
+            <span>Add emoji/symbol fallbacks</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="opt-fallbacks-cjk" />
+            <span>Add CJK fallbacks</span>
+          </label>
         </div>
       </div>
     </section>
