@@ -1,6 +1,7 @@
 (function () {
   const titleInput = document.getElementById('title-input');
   const subtitleInput = document.getElementById('subtitle-input');
+  const dateInput = document.getElementById('date-input');
   const documentclassSelect = document.getElementById('documentclass-select');
   const optLandscape = document.getElementById('opt-landscape');
   const optOneside = document.getElementById('opt-oneside');
@@ -38,6 +39,7 @@
   const DEFAULTS = {
     title: '',
     subtitle: '',
+    date: '',
     documentclass: 'article',
     classoptions: [],
     toc: false,
@@ -93,6 +95,12 @@
     if (rawSubtitle.length > 0) {
       const escapedSub = escapeYamlSingleQuoted(rawSubtitle);
       lines.push("subtitle: '" + escapedSub + "'");
+    }
+
+    const rawDate = dateInput.value.trim();
+    if (rawDate && rawDate.length > 0) {
+      const escapedDate = escapeYamlSingleQuoted(rawDate);
+      lines.push("date: '" + escapedDate + "'");
     }
 
     const documentclass = documentclassSelect.value || DEFAULTS.documentclass;
@@ -212,6 +220,7 @@
   function resetToDefaults() {
     titleInput.value = DEFAULTS.title;
     subtitleInput.value = DEFAULTS.subtitle;
+    dateInput.value = DEFAULTS.date;
 
     documentclassSelect.value = DEFAULTS.documentclass;
     optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
@@ -286,6 +295,7 @@
     [
       titleInput,
       subtitleInput,
+      dateInput,
       documentclassSelect,
       optLandscape,
       optOneside,
