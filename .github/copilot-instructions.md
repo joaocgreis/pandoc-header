@@ -45,6 +45,11 @@
   - When updating YAML generation, ensure `buildYaml()` preserves the rule that the YAML output finishes with exactly three trailing newlines. The code uses a final string concatenation to append `"\n\n\n"` so copy operations and previews include the trailing blank lines.
   - Update `README.md` and this file if the behavior or defaults change.
 
+### New fields
+
+- Add the field variable near the top of `script.js` with the other control bindings (for example: `const myNewInput = document.getElementById('my-new-input');`).
+- **Rule:** When using that variable elsewhere in `script.js`, do NOT check whether it is defined (for example, avoid `if (typeof myNewInput !== 'undefined') ...`). The HTML always provides the element, so the variable is guaranteed to be defined and direct access is the expected pattern. Also avoid truthy or compound checks like `if (myNewInput)` or `if (myNewInput && myNewInput.value)` — these checks are unnecessary and discouraged.
+
 ### Sorting sub-objects and arrays
 
 - **Rule:** Any sub-objects or arrays emitted as YAML values (for example lists under `classoption:` or `geometry:`) MUST be emitted in sorted order (alphabetically) to ensure deterministic output. The top-level YAML keys (the root keys emitted as individual lines) must keep the existing emission order used by `buildYaml()`; only the contents of arrays/sub-objects should be reordered.

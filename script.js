@@ -1,5 +1,6 @@
 (function () {
   const titleInput = document.getElementById('title-input');
+  const subtitleInput = document.getElementById('subtitle-input');
   const documentclassSelect = document.getElementById('documentclass-select');
   const optLandscape = document.getElementById('opt-landscape');
   const optOneside = document.getElementById('opt-oneside');
@@ -36,6 +37,7 @@
 
   const DEFAULTS = {
     title: '',
+    subtitle: '',
     documentclass: 'article',
     classoptions: [],
     toc: false,
@@ -82,10 +84,15 @@
     lines.push('---');
 
     const rawTitle = titleInput.value.trim();
-    const useTitle = rawTitle.length > 0;
-    if (useTitle) {
+    if (rawTitle.length > 0) {
       const escaped = escapeYamlSingleQuoted(rawTitle);
       lines.push("title: '" + escaped + "'");
+    }
+
+    const rawSubtitle = subtitleInput.value.trim();
+    if (rawSubtitle.length > 0) {
+      const escapedSub = escapeYamlSingleQuoted(rawSubtitle);
+      lines.push("subtitle: '" + escapedSub + "'");
     }
 
     const documentclass = documentclassSelect.value || DEFAULTS.documentclass;
@@ -204,6 +211,7 @@
 
   function resetToDefaults() {
     titleInput.value = DEFAULTS.title;
+    subtitleInput.value = DEFAULTS.subtitle;
 
     documentclassSelect.value = DEFAULTS.documentclass;
     optLandscape.checked = DEFAULTS.classoptions.includes('landscape');
@@ -277,6 +285,7 @@
   function attachListeners() {
     [
       titleInput,
+      subtitleInput,
       documentclassSelect,
       optLandscape,
       optOneside,
