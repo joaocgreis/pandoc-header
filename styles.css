@@ -1,41 +1,147 @@
-* {
-  box-sizing: border-box;
-}
+/**
+ * Pandoc YAML Header Builder - Styles
+ *
+ * Organized into sections:
+ * 1. CSS Custom Properties (Design Tokens)
+ * 2. Reset & Base Styles
+ * 3. Layout Components
+ * 4. Card Components
+ * 5. Form Elements
+ * 6. Form Layout
+ * 7. Form States
+ * 8. Buttons
+ * 9. YAML Output
+ */
+
+/* ==========================================================================
+   1. CSS Custom Properties (Design Tokens)
+   ========================================================================== */
 
 :root {
-  --gap: 1.5rem;
+  /* Layout */
+  --layout-max-width: 1800px;
+  --controls-max-width: 600px;
+  --breakpoint-md: 800px;
+
+  /* Colors - Backgrounds */
+  --color-bg-page: #f5f5f7;
+  --color-bg-card: #ffffff;
+  --color-bg-header: #1f2933;
+  --color-bg-code: #0b1220;
+
+  /* Colors - Text */
+  --color-text-primary: #222;
+  --color-text-light: #f9fafb;
+  --color-text-muted: #6b7280;
+
+  /* Colors - Gray Scale */
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-900: #111827;
+
+  /* Colors - Brand */
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-success: #059669;
+  --color-error: #d64545;
+  --color-error-bg: #fff6f6;
+
+  /* Colors - Border */
+  --color-border-input: #cbd2e1;
+
+  /* Spacing Scale */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.35rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-base: 1rem;
+  --space-md: 1.25rem;
+  --space-lg: 1.5rem;
+  --space-xl: 1.75rem;
+  --space-2xl: 2rem;
+
+  /* Typography - Font Families */
+  --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-mono: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  /* Typography - Font Sizes */
+  --font-size-2xs: 0.8rem;
+  --font-size-xs: 0.85rem;
+  --font-size-sm: 0.9rem;
+  --font-size-base: 0.95rem;
+  --font-size-lg: 1.1rem;
+  --font-size-xl: 1.5rem;
+
+  /* Typography - Font Weights */
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Typography - Line Height */
+  --line-height-normal: 1.4;
+
+  /* Sizing */
+  --input-height: 2.2rem;
+  --yaml-min-height: 180px;
+
+  /* Border Radius */
+  --radius-xs: 0.35rem;
+  --radius-sm: 0.4rem;
+  --radius-md: 0.5rem;
+
+  /* Shadows */
+  --shadow-card: 0 10px 20px rgba(15, 23, 42, 0.06);
+  --shadow-error: 0 0 0 3px rgba(214, 69, 69, 0.06);
+  --shadow-error-focus: 0 0 0 4px rgba(214, 69, 69, 0.12);
+
+  /* Focus */
+  --focus-ring: 2px solid var(--color-primary);
+
+  /* Opacity */
+  --opacity-muted: 0.85;
+}
+
+/* ==========================================================================
+   2. Reset & Base Styles
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: #f5f5f7;
-  color: #222;
+  font-family: var(--font-family-base);
+  background-color: var(--color-bg-page);
+  color: var(--color-text-primary);
 }
 
+/* ==========================================================================
+   3. Layout Components
+   ========================================================================== */
+
 .app-header {
-  padding: 1.5rem 1.75rem;
-  background: #1f2933;
-  color: #f9fafb;
+  padding: var(--space-lg) var(--space-xl);
+  background: var(--color-bg-header);
+  color: var(--color-text-light);
 }
 
 .app-header h1 {
-  margin: 0 0 0.25rem 0;
-  font-size: 1.5rem;
+  margin: 0 0 var(--space-3xs) 0;
+  font-size: var(--font-size-xl);
 }
 
 .app-header p {
   margin: 0;
-  opacity: 0.85;
+  opacity: var(--opacity-muted);
 }
 
 .app-main {
   display: grid;
-  grid-template-columns: minmax(0, min(600px, calc((100% - var(--gap)) / 2))) 1fr;
-  gap: var(--gap);
-  padding: 1.5rem 1.75rem 2rem;
-  max-width: 1800px;
+  grid-template-columns: minmax(0, min(var(--controls-max-width), calc((100% - var(--space-lg)) / 2))) 1fr;
+  gap: var(--space-lg);
+  padding: var(--space-lg) var(--space-xl) var(--space-2xl);
+  max-width: var(--layout-max-width);
   margin: 0 auto;
 }
 
@@ -45,214 +151,231 @@ body {
   }
 }
 
+/* ==========================================================================
+   4. Card Components
+   ========================================================================== */
+
 .controls,
 .preview {
-  background: #ffffff;
-  border-radius: 0.5rem;
-  padding: 1.25rem 1.5rem 1.5rem;
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  box-shadow: var(--shadow-card);
 }
 
 .controls h2,
 .preview h2 {
   margin-top: 0;
-  margin-bottom: 0.75rem;
-  font-size: 1.1rem;
+  margin-bottom: var(--space-sm);
+  font-size: var(--font-size-lg);
 }
 
 .controls-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
 }
 
 .controls-header h2 {
   margin: 0;
 }
 
-#reset-button {
-  background: #e5e7eb;
-  color: #111827;
-  padding: 0.35rem 0.6rem;
+/* ==========================================================================
+   5. Form Elements
+   ========================================================================== */
+
+/* Shared input styles for text inputs, selects, and multi-inputs */
+input[type='text'],
+select,
+.field-multi-input {
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--color-border-input);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  min-width: 0;
 }
 
-#reset-button:hover {
-  background: #d1d5db;
+.field-multi-input {
+  height: var(--input-height);
+  width: 100%;
 }
+
+.field-row input[type='text'],
+.field-row select {
+  flex: 1 1 auto;
+  width: auto;
+  height: var(--input-height);
+  min-height: var(--input-height);
+  vertical-align: baseline;
+}
+
+input[type='text']:focus,
+select:focus,
+.field-multi-input:focus {
+  outline: var(--focus-ring);
+  border-color: var(--color-primary);
+}
+
+/* ==========================================================================
+   6. Form Layout
+   ========================================================================== */
 
 .field-group {
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--space-3xs);
 }
 
 /* Indent every element in a field-group after the first to visually group them */
 .field-group>*+* {
-  margin-left: 1rem;
+  margin-left: var(--space-base);
 }
 
 .field-row {
   display: flex;
   align-items: baseline;
-  gap: 0.75rem;
-  margin-bottom: 0.25rem;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-3xs);
 }
 
 .field-label {
   display: inline-block;
   margin: 0;
-  line-height: 1.4;
+  line-height: var(--line-height-normal);
   vertical-align: baseline;
+}
+
+/* Apply bold only to explicitly marked primary labels */
+.label-primary {
+  margin-top: var(--space-base);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Multi-row field layout (e.g. authors) matching field-row appearance */
 .field-multi {
   display: flex;
   align-items: baseline;
-  gap: 0.75rem;
-  margin-bottom: 0.25rem;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-3xs);
 }
 
 .field-multi .field-label {
-  padding-top: 0.35rem;
-  line-height: 1.4;
+  padding-top: var(--space-2xs);
+  line-height: var(--line-height-normal);
 }
 
 .field-multi-inputs {
   display: flex;
   flex-direction: column;
-  column-gap: 0.5rem;
-  row-gap: 4px;
+  column-gap: var(--space-xs);
+  row-gap: var(--space-3xs);
   flex: 1 1 auto;
   min-width: 0;
-}
-
-.field-multi-input {
-  padding: 0.35rem 0.5rem;
-  border-radius: 0.35rem;
-  border: 1px solid #cbd2e1;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  height: 2.2rem;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-/* Apply bold only to explicitly marked primary labels */
-.label-primary {
-  margin-top: 1rem;
-  font-weight: 600;
 }
 
 .field-inline {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: var(--space-sm);
   align-items: center;
-}
-
-input[type='text'],
-select {
-  padding: 0.35rem 0.5rem;
-  border-radius: 0.35rem;
-  border: 1px solid #cbd2e1;
-  font-size: 0.95rem;
-  min-width: 0;
-}
-
-.field-row input[type='text'],
-.field-row select {
-  line-height: 1.4;
-  vertical-align: baseline;
-  flex: 1 1 auto;
-  width: auto;
-  box-sizing: border-box;
-  height: 2.2rem;
-  min-height: 2.2rem;
-}
-
-input[type='text']:focus,
-select:focus {
-  outline: 2px solid #2563eb;
-  border-color: #2563eb;
-}
-
-/* Visual hint for invalid inputs used by the JS validation */
-.input-invalid {
-  /* accessible red */
-  border: 2px solid #d64545;
-  /* very light red tint */
-  background-color: #fff6f6;
-  /* subtle glow */
-  box-shadow: 0 0 0 3px rgba(214, 69, 69, 0.06);
-  outline: none;
-}
-
-.input-invalid:focus {
-  box-shadow: 0 0 0 4px rgba(214, 69, 69, 0.12);
 }
 
 .checkbox-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem 1.25rem;
-  margin-bottom: 0.25rem;
+  gap: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-3xs);
 }
 
 .checkbox-label {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--space-2xs);
 }
 
 .field-help {
-  margin: 0.35rem 0 0;
-  font-size: 0.8rem;
-  color: #6b7280;
+  margin: var(--space-2xs) 0 0;
+  font-size: var(--font-size-2xs);
+  color: var(--color-text-muted);
 }
 
-.actions {
-  margin-top: 1.25rem;
+/* ==========================================================================
+   7. Form States
+   ========================================================================== */
+
+/* Visual hint for invalid inputs used by the JS validation */
+.input-invalid {
+  border: 2px solid var(--color-error);
+  background-color: var(--color-error-bg);
+  box-shadow: var(--shadow-error);
+  outline: none;
 }
+
+.input-invalid:focus {
+  box-shadow: var(--shadow-error-focus);
+}
+
+/* ==========================================================================
+   8. Buttons
+   ========================================================================== */
 
 button {
   cursor: pointer;
   border: none;
-  border-radius: 0.35rem;
-  padding: 0.4rem 0.75rem;
-  font-size: 0.95rem;
-  font-weight: 500;
+  border-radius: var(--radius-xs);
+  padding: var(--space-2xs) var(--space-sm);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+}
+
+#reset-button {
+  background: var(--color-gray-200);
+  color: var(--color-gray-900);
+  padding: var(--space-2xs) 0.6rem;
+}
+
+#reset-button:hover {
+  background: var(--color-gray-300);
 }
 
 .copy-button {
-  margin-top: 0.75rem;
-  background: #2563eb;
-  color: #f9fafb;
+  margin-top: var(--space-sm);
+  background: var(--color-primary);
+  color: var(--color-text-light);
 }
 
 .copy-button:hover {
-  background: #1d4ed8;
+  background: var(--color-primary-dark);
 }
 
 .copy-status {
   display: inline-block;
-  margin-left: 0.5rem;
-  font-size: 0.85rem;
-  color: #059669;
+  margin-left: var(--space-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-success);
 }
+
+.actions {
+  margin-top: var(--space-md);
+}
+
+/* ==========================================================================
+   9. YAML Output
+   ========================================================================== */
 
 .yaml-output {
   margin: 0;
-  padding: 0.75rem 0.9rem;
-  background: #0b1220;
-  color: #e5e7eb;
-  border-radius: 0.4rem;
-  min-height: 180px;
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  font-size: 0.9rem;
+  padding: var(--space-sm) var(--space-sm);
+  background: var(--color-bg-code);
+  color: var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  min-height: var(--yaml-min-height);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
   overflow-x: auto;
 }
 
 .yaml-output:focus {
-  outline: 2px solid #2563eb;
+  outline: var(--focus-ring);
 }

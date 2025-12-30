@@ -17,12 +17,14 @@
   </header>
 
   <main class="app-main">
-    <section class="controls">
+    <!-- Controls Panel -->
+    <section class="controls" aria-labelledby="controls-heading">
       <div class="controls-header">
-        <h2>Options</h2>
+        <h2 id="controls-heading">Options</h2>
         <button type="button" id="reset-button">Reset to defaults</button>
       </div>
 
+      <!-- Metadata Section -->
       <div class="field-group">
         <div class="field-row">
           <label class="field-label label-primary" for="title-input">Title:</label>
@@ -44,10 +46,12 @@
         </div>
       </div>
 
+      <!-- Page Section -->
       <div class="field-group">
         <div class="field-row">
-          <label class="field-label label-primary">Page</label>
+          <span class="field-label label-primary">Page</span>
         </div>
+
         <div class="field-group">
           <div class="field-row">
             <label class="field-label" for="documentclass-select">Document class:</label>
@@ -76,12 +80,14 @@
             </label>
           </div>
         </div>
+
         <div class="checkbox-group">
           <label class="checkbox-label">
             <input type="checkbox" id="emptypage-checkbox" checked />
             <span>Do not print page numbers and headings on empty pages</span>
           </label>
         </div>
+
         <div class="field-row">
           <label class="field-label" for="papersize-select">Paper size:</label>
           <select id="papersize-select">
@@ -89,9 +95,10 @@
             <option value="letter">letter</option>
           </select>
         </div>
+
         <div class="field-group">
           <div class="field-row">
-            <label class="field-label">Geometry</label>
+            <span class="field-label">Geometry</span>
           </div>
           <div class="field-row">
             <label class="field-label" for="margin-input">Margin:</label>
@@ -100,6 +107,7 @@
         </div>
       </div>
 
+      <!-- Table of Contents Section -->
       <div class="field-group">
         <div class="checkbox-group">
           <label class="checkbox-label label-primary">
@@ -114,14 +122,15 @@
           </div>
           <div class="field-row">
             <label class="field-label" for="toc-depth-input">Depth:</label>
-            <input id="toc-depth-input" type="text" inputmode="numeric" pattern="\\d*" placeholder="e.g. 2" />
+            <input id="toc-depth-input" type="text" inputmode="numeric" pattern="\d*" placeholder="e.g. 2" />
           </div>
         </div>
       </div>
 
+      <!-- Fonts Section -->
       <div class="field-group">
         <div class="field-row">
-          <label class="field-label label-primary">Fonts</label>
+          <span class="field-label label-primary">Fonts</span>
         </div>
         <div class="field-row">
           <label class="field-label" for="fontsize-select">Font size:</label>
@@ -155,9 +164,10 @@
         </div>
       </div>
 
+      <!-- Style Section -->
       <div class="field-group">
         <div class="field-row">
-          <label class="field-label label-primary">Style</label>
+          <span class="field-label label-primary">Style</span>
         </div>
         <div class="checkbox-group">
           <label class="checkbox-label">
@@ -200,8 +210,9 @@
       </div>
     </section>
 
-    <section class="preview">
-      <h2>YAML Preview</h2>
+    <!-- Preview Panel -->
+    <section class="preview" aria-labelledby="preview-heading">
+      <h2 id="preview-heading">YAML Preview</h2>
       <pre id="yaml-output" class="yaml-output" aria-label="Generated YAML" tabindex="0"></pre>
       <button type="button" id="copy-button" class="copy-button">Copy YAML</button>
       <span id="copy-status" class="copy-status" aria-live="polite"></span>
