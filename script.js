@@ -244,6 +244,7 @@
     elements.copyButton = document.getElementById('copy-button');
     elements.copyStatus = document.getElementById('copy-status');
     elements.resetButton = document.getElementById('reset-button');
+    elements.todayButton = document.getElementById('today-button');
   }
 
   /**
@@ -294,6 +295,24 @@
    */
   function getTrimmedValue(el) {
     return (el.value || '').trim();
+  }
+
+  /**
+   * Formats the current date as "Month Day, Year" (e.g., "December 31, 2025").
+   * @returns {string} The formatted date string
+   */
+  function formatTodayDate() {
+    const today = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return today.toLocaleDateString('en-US', options);
+  }
+
+  /**
+   * Sets the date input to today's date and updates the UI.
+   */
+  function setDateToToday() {
+    elements.dateInput.value = formatTodayDate();
+    updateAll();
   }
 
   /**
@@ -644,6 +663,7 @@
     // Attach button listeners
     elements.resetButton.addEventListener('click', resetToDefaults);
     elements.copyButton.addEventListener('click', copyToClipboard);
+    elements.todayButton.addEventListener('click', setDateToToday);
   }
 
   /* ==========================================================================
